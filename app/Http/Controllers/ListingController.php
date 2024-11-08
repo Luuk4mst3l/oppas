@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\List_;
 
 class ListingController extends Controller
 {
@@ -45,17 +44,27 @@ class ListingController extends Controller
             $formFields['photo'] = $request->file('photo')->store('photos', 'public');
         }
 
+        $formFields['user_id'] = auth()->id();
+
         Listing::create($formFields);
 
         return redirect('/')->with('message', 'Verzoek succesvol aangemaakt.');
     }
 
     public function edit (Listing $listing) {
+        if($listing->user_id != auth()->id()) {
+            abort(403, 'Ongeauthoriseerde actie');
+        }
         // dd($listing);
         return view('listings.edit', ['listing' => $listing]);
     }
 
     public function update (Request $request, Listing $listing) {
+        
+        if($listing->user_id != auth()->id()) {
+            abort(403, 'Ongeauthoriseerde actie');
+        }
+
         $formFields = $request->validate([
             'title' => 'required|max:255',
             'start_date' => 'required|date',
@@ -76,7 +85,14 @@ class ListingController extends Controller
     }
 
     public function destroy(Listing $listing) {
+        if($listing->user_id != auth()->id()) {
+            abort(403, 'Ongeauthoriseerde actie');
+        }
         $listing->delete();
         return redirect('/')->with('message', 'Verzoek succesvol verwijderd');
+    }
+
+    public function manage() {
+        return view('listings.manage', ['listings' => auth()->user()->listings()->get()]);
     }
 }

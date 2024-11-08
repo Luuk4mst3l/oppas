@@ -7,7 +7,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ListingController;
 
 
-
+//Manage
+Route::get('/listings/manage', [ListingController::class, 'manage'])->middleware('auth');
 //Index
 Route::get('/', [ListingController::class, 'index']);
 //create
@@ -22,12 +23,11 @@ Route::put('/listings/{listing}', [ListingController::class, 'update']);
 Route::delete('/listings/{listing}', [ListingController::class, 'destroy']);
 //show
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
+
 //Respond
 //Route::get('/listings/{listing}/respond', [ListingController::class, 'respond'])->name('listings.respond');
 //Show Register create
-// Route::get('/register', [UserController::class, 'create']);
-// //store user
-// Route::post('/users', [UserController::class, 'store']);
+
 // Show Register/Create Form
 Route::get('/register', [UserController::class, 'create'])->middleware('guest');
 
@@ -42,3 +42,8 @@ Route::get('/login', [UserController::class, 'login'])->name('login')->middlewar
 
 // Log In User
 Route::post('/users/authenticate', [UserController::class, 'authenticate']);
+//index
+//Route::get('/admin', [ListingController::class, 'indexAdmin'])->middleware('auth');
+//delete
+//Route::delete('/admin/{user}', [UserController::class, 'destroy'])->middleware('auth');
+

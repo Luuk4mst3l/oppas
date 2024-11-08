@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Listing extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'start_date', 'end_date', 'locations', 'tags', 'description', 'hourly_rate'];
+    protected $fillable = ['title', 'start_date', 'end_date', 'user_id','locations', 'tags', 'description', 'hourly_rate'];
 
     protected $casts = [
         'tags' => 'array',
@@ -29,6 +29,10 @@ class Listing extends Model
                 ->orWhere('description', 'like', '%' . request('search') . '%')
                 ->orWhere('tags', 'like', '%' . request('search') . '%');
         }
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 }
