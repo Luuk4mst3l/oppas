@@ -2,7 +2,7 @@
     <x-card class="p-10">
       <header>
         <h1 class="text-3xl text-center font-bold my-6 uppercase">
-          Manage Gigs
+          Manage oppasverzoeken
         </h1>
       </header>
   
@@ -33,7 +33,7 @@
             @else
                 <tr>
                     <td class="px-4 py-8 text-lg text-center" colspan="2">
-                        <p class="text-gray-500">No Listings Found</p>
+                        <p class="text-gray-500">Geen Oppasverzoeken Gevonden</p>
                     </td>
                 </tr>
             @endunless

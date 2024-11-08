@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -45,6 +46,11 @@ class User extends Authenticatable
     // Relationship With Listings
     public function listings() {
         return $this->hasMany(Listing::class, 'user_id');
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 
 }

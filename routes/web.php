@@ -4,7 +4,9 @@ use App\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\ProfileController;
 
 
 //Manage
@@ -12,7 +14,7 @@ Route::get('/listings/manage', [ListingController::class, 'manage'])->middleware
 //Index
 Route::get('/', [ListingController::class, 'index']);
 //create
-Route::get('/listings/create', [ListingController::class, 'create']);
+Route::get('/listings/create', [ListingController::class, 'create'])->middleware('auth');
 //store
 Route::post('/listings', [ListingController::class, 'store'])->name('listings.store');
 //edit
@@ -43,7 +45,17 @@ Route::get('/login', [UserController::class, 'login'])->name('login')->middlewar
 // Log In User
 Route::post('/users/authenticate', [UserController::class, 'authenticate']);
 //index
-//Route::get('/admin', [ListingController::class, 'indexAdmin'])->middleware('auth');
+Route::get('/admin', [ListingController::class, 'indexAdmin'])->middleware('auth');
 //delete
-//Route::delete('/admin/{user}', [UserController::class, 'destroy'])->middleware('auth');
+Route::delete('/admin/{user}', [UserController::class, 'destroy'])->middleware('auth');
 
+Route::middleware('auth')->group(function () {
+    // Profile route
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // Admin routes (Only accessible by admins)
+    Route::middleware('is_admin')->group(function () {
+        Route::get('/admin', [ProfileController::class, 'admin'])->name('admin.dashboard');
+    });
+});
